@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Arrow from '../components/Arrow.astro';
+import { site } from '../config/site';
+import { useTranslations } from '../i18n/ui';
+
+// Only active projects. The Zusamo link points to its pilot host, which is never named in the text.
+const t = useTranslations('de');
+---
+
+<BaseLayout
+  title="Projekte · Davide Cundò: Zusamo, KI-Team und mehr"
+  description="Was ich mit KI baue und einsetze: Zusamo, entstanden aus meinem Vereinstool, mein Team aus KI-Assistenten und weitere laufende Projekte."
+>
+  <section aria-labelledby="projects-title" class="container-page pt-12 md:pt-16">
+    <h1 id="projects-title" class="fade-up" style="--d:0">Woran ich arbeite</h1>
+    <p class="fade-up mt-5" style="--d:1">
+      Jede Karte zeigt, was ein Projekt ist, wie weit es ist und womit ich es baue.
+    </p>
+
+    <div class="hairline-grid fade-up mt-10" style="--d:2">
+      <ProjectCard
+        title="Zusamo"
+        pillar="Bauen"
+        status="Pilot"
+        tags={['Codex', 'Verein', 'Pilot']}
+        href="https://zusamo.klarki.ch/"
+        linkLabel="Zusamo ansehen"
+      >
+        <p>
+          Angefangen hat es mit einem Verwaltungstool für die U.S. Virtus Badolato, gebaut mit Codex. Daraus ist Zusamo
+          geworden, eine Vereinsverwaltung für kleine Vereine. Ich baue sie nach dem weiter, was die Vereine im Pilot
+          brauchen.
+        </p>
+      </ProjectCard>
+
+      <ProjectCard title="Mein KI-Team" pillar="Bauen" status="im Einsatz" tags={['Notion', 'KI-Assistenten', 'Human in the loop']}>
+        <p>
+          Ari organisiert, Dev programmiert, Mia hilft beim Content, Leo beim Verkauf. Bevor sie arbeiten, lesen alle
+          dieselben Seiten in meinem Notion, mit meinem Kontext und den Regeln, was sie nie dürfen. Veröffentlicht wird
+          nur, was ich freigegeben habe.
+        </p>
+      </ProjectCard>
+
+
+      <ProjectCard
+        title="Practical AI"
+        pillar="Anwenden"
+        status="Läuft"
+        tags={['X', 'Englisch', 'Verkauf']}
+        href={site.social.x}
+        linkLabel="Auf X mitlesen (@DavideCundo)"
+      >
+        <p>
+          Kurze englische Posts auf X über praktische KI im Job, für Leute in Verkauf, Key Account Management und
+          Wissensarbeit. Pro Post ein Ablauf, den man direkt selbst ausprobieren kann.
+        </p>
+      </ProjectCard>
+    </div>
+
+    <p class="fade-up mt-10" style="--d:3">
+      <a href={site.social.linkedin} class="group text-link inline-flex items-center gap-1" rel="me noopener" target="_blank">
+        Dienstags und freitags erzähle ich auf LinkedIn, wie es weitergeht
+        <Arrow dir="ne" class="!text-link" />
+        <span class="sr-only"> {t('external.newTab')}</span>
+      </a>
+    </p>
+  </section>
+</BaseLayout>

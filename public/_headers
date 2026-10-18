@@ -1,0 +1,10 @@
+# Cloudflare Pages headers (static). Applied only when deployed on Cloudflare Pages.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Keep Cloudflare preview deployments (*.pages.dev) out of search engines.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex

@@ -1,0 +1,358 @@
+@import "tailwindcss";
+
+/*
+ * Calm layout, modelled on rasmic.xyz: one narrow column (672px),
+ * one sans (Instrument Sans) for text and headings, Geist Mono only for small meta,
+ * hairline grids (tiles on a muted surface with 1px gaps), hover-only effects.
+ *
+ * THEMING: every colour comes from a CSS custom property. Two palettes exist,
+ * selected by `data-theme` on <html> (set at build time in BaseLayout from
+ * PUBLIC_THEME, default "ab-1"). To swap the palette, change that one value.
+ * `@theme inline` makes utilities read the raw vars directly (text-ink -> var(--ink)).
+ */
+@theme inline {
+  --color-*: initial;
+
+  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-hairline: var(--hairline);
+  --color-hover: var(--hover);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
+  --color-link: var(--link);
+  --color-line: var(--line);
+  --color-deco: var(--deco);
+  --color-ph-bg: var(--ph-bg);
+  --color-ph-ink: var(--ph-ink);
+  --color-ph-line: var(--ph-line);
+
+  /* Small mono meta (status, dates, domains, tags, footer). */
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.25rem;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/*
+ * Palettes. All text pairs measured with the WCAG 2.1 formula:
+ * ab-1  ink/bg 16.6 · muted/bg 7.0 · link/bg 7.3 · on-accent/accent 8.2 · ink/ph-bg 12.5
+ * ab-2  ink/bg 17.8 · muted/bg 7.5 · link/bg 10.1 · on-accent/accent 12.9 · ink/ph-bg 15.5
+ * line, hairline and deco are decorative only (never text).
+ * The dark-* values are kept for later use; no section uses them at the moment.
+ */
+:root,
+[data-theme="ab-1"] {
+  /* "Kobalt & Pergament" */
+  --bg: #f4f1e3;
+  --surface: #fbf9f0;
+  --ink: #05102d;
+  --muted: #4a5068;
+  --accent: #1f3fc3;
+  --on-accent: #ffffff;
+  --link: #1f3fc3;
+  --line: #d9d4bf;
+  --dark: #05102d;
+  --dark-ink: #fff7e3;
+  --dark-muted: #a9b0c8;
+  --dark-accent: #cdb178;
+  --deco: #cdb178;
+}
+
+[data-theme="ab-2"] {
+  /* "Bordeaux & Elfenbein" */
+  --bg: #fffcef;
+  --surface: #f8f8ec;
+  --ink: #31020d;
+  --muted: #6a4a51;
+  --accent: #66001f;
+  --on-accent: #fffcef;
+  --link: #85021f;
+  --line: #e7dad4;
+  --dark: #31020d;
+  --dark-ink: #f8f8ec;
+  --dark-muted: #c9bfc2;
+  --dark-accent: #bdc5cf;
+  --deco: #dfe3ea;
+}
+
+/*
+ * Derived roles, computed from the active palette.
+ * hairline: the "muted" surface behind hairline grids (slightly darker pergament).
+ *   The 1px gaps between the tiles show it as fine lines.
+ * hover: tile/row background on hover (between bg and hairline).
+ */
+:root {
+  --hairline: color-mix(in srgb, var(--line) 85%, var(--bg));
+  --hover: color-mix(in srgb, var(--line) 30%, var(--bg));
+  --accent-hover: color-mix(in srgb, var(--accent) 80%, var(--ink));
+  --ph-bg: color-mix(in srgb, var(--deco) 55%, var(--surface));
+  --ph-ink: var(--ink);
+  --ph-line: var(--accent);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  /* Body: Instrument Sans 400, 17px on all screen sizes, line-height 1.65. */
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    font-weight: 400;
+  }
+  h1,
+  h2,
+  h3 {
+    font-weight: 600;
+    text-wrap: balance;
+    hyphens: manual;
+  }
+  h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  @media (min-width: 40rem) {
+    h1 {
+      font-size: 2.5rem;
+      line-height: 1.15;
+    }
+  }
+  h2 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 1.0625rem;
+    line-height: 1.4;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--deco);
+    color: var(--ph-ink);
+  }
+  /* Visible focus for keyboard users on every interactive element. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  a {
+    @apply underline-offset-4;
+  }
+}
+
+@layer components {
+  /* The one narrow column (rasmic: --container-column 672px = max-w-2xl). */
+  .container-page {
+    @apply mx-auto w-full max-w-2xl px-6;
+  }
+  .prose-page p {
+    @apply mb-5 text-ink;
+  }
+
+  /* Small mono meta label. */
+  .meta {
+    @apply font-mono text-meta tabular-nums text-muted;
+  }
+
+  /*
+   * Hairline grid (rasmic): tiles on the muted surface with 1px gaps.
+   * Usage: <div class="hairline-grid sm:grid-cols-2"><div class="tile">…</div></div>
+   */
+  .hairline-grid {
+    @apply grid gap-px rounded-sm bg-hairline p-px;
+  }
+  .tile {
+    @apply rounded-[3px] bg-bg;
+  }
+  .tile-link {
+    @apply rounded-[3px] bg-bg no-underline text-ink;
+    transition: background-color 150ms ease;
+  }
+  .tile-link:hover,
+  .tile-link:focus-visible,
+  .tile:has(.stretched-link:hover),
+  .tile:has(.stretched-link:focus-visible) {
+    background-color: var(--hover);
+  }
+  /* Makes the whole tile clickable while the link text stays the accessible name. */
+  .stretched-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Arrow that slides a little on hover of its row/tile. */
+  .arrow {
+    @apply shrink-0 text-muted;
+    transition:
+      transform 200ms var(--ease-out-soft),
+      color 150ms ease;
+  }
+  .group:hover .arrow,
+  .group:focus-visible .arrow {
+    color: var(--ink);
+  }
+  .group:hover .arrow-se,
+  .group:focus-visible .arrow-se {
+    transform: translate(2px, 2px);
+  }
+  .group:hover .arrow-ne,
+  .group:focus-visible .arrow-ne {
+    transform: translate(2px, -2px);
+  }
+  .group:hover .arrow-e,
+  .group:focus-visible .arrow-e {
+    transform: translateX(3px);
+  }
+
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 font-semibold no-underline bg-accent text-on-accent hover:bg-accent-hover;
+    transition: background-color 150ms ease;
+  }
+
+  /*
+   * Link underline that grows from the left on hover/focus. A static thin underline
+   * stays visible, so links never rely on colour alone.
+   */
+  .text-link {
+    @apply font-medium text-link no-underline;
+    background-image:
+      linear-gradient(currentColor, currentColor),
+      linear-gradient(color-mix(in srgb, currentColor 35%, transparent), color-mix(in srgb, currentColor 35%, transparent));
+    background-size:
+      0% 1.5px,
+      100% 1px;
+    background-position:
+      0 100%,
+      0 100%;
+    background-repeat: no-repeat;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding-bottom: 2px;
+    transition: background-size 300ms var(--ease-out-soft);
+  }
+  .text-link:hover,
+  .text-link:focus-visible {
+    background-size:
+      100% 1.5px,
+      100% 1px;
+  }
+
+  /* Quiet nav/footer link: no underline at rest, it grows on hover; current page keeps it. */
+  .nav-link {
+    @apply no-underline;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+    transition:
+      background-size 300ms var(--ease-out-soft),
+      color 150ms ease;
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible,
+  .nav-link[aria-current="page"] {
+    background-size: 100% 1px;
+  }
+
+  /* Visible marker for copy that is still a placeholder: [like this]. */
+  .placeholder {
+    @apply rounded-[3px] bg-ph-bg px-1.5 py-px font-mono text-[0.86em] font-medium text-ph-ink;
+    font-style: normal;
+    letter-spacing: 0;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    outline: 1px dashed var(--ph-line);
+    outline-offset: 1px;
+  }
+
+  /*
+   * Border beam: port of 21st.dev "Border Beam" (dillionverma / magicui, demo 1268).
+   * Same structure as the original: transparent border, mask that keeps only the border
+   * box (padding-box + border-box, intersect), a square ::after with a gradient that
+   * travels along offset-path rect(... round size). Used once: the main button on home.
+   * Props as CSS vars: --beam-size, --beam-duration, --beam-anchor, --beam-width,
+   * --beam-from, --beam-to. Hidden completely for reduced motion.
+   */
+  .border-beam {
+    @apply pointer-events-none absolute inset-0 rounded-[inherit];
+    border: calc(var(--beam-width, 1.5) * 1px) solid transparent;
+    mask:
+      linear-gradient(transparent, transparent) padding-box,
+      linear-gradient(#fff, #fff) border-box;
+    mask-composite: intersect;
+  }
+  .border-beam::after {
+    content: "";
+    position: absolute;
+    aspect-ratio: 1;
+    width: calc(var(--beam-size, 200) * 1px);
+    background: linear-gradient(to left, var(--beam-from, var(--deco)), var(--beam-to, var(--on-accent)), transparent);
+    offset-anchor: calc(var(--beam-anchor, 90) * 1%) 50%;
+    offset-path: rect(0 auto auto 0 round calc(var(--beam-size, 200) * 1px));
+    animation: border-beam calc(var(--beam-duration, 15) * 1s) linear infinite;
+  }
+
+  /* Gentle fade-in-up on load, staggered via --d (0, 1, 2 …). Off for reduced motion. */
+  .fade-up {
+    animation: fade-in-up 600ms var(--ease-out-soft) both;
+    animation-delay: calc(var(--d, 0) * 70ms);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes border-beam {
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .border-beam {
+    display: none;
+  }
+  .group:hover .arrow,
+  .group:focus-visible .arrow {
+    transform: none;
+  }
+}
+
+/* Placeholders render nothing (Ph.astro); do not leave empty paragraphs behind. */
+@layer base {
+  p:empty {
+    display: none;
+  }
+}

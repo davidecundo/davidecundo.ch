@@ -1,0 +1,48 @@
+---
+// One sans for text and headings: Instrument Sans (wght axis). Geist Mono only for small meta.
+import '@fontsource-variable/instrument-sans/wght.css';
+import '@fontsource-variable/geist-mono/index.css';
+import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../config/site';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  ogType?: 'website' | 'profile';
+}
+
+const { title, description, noindex = false, ogType } = Astro.props;
+const t = useTranslations('de');
+// Palette is chosen at build time: PUBLIC_THEME=ab-2 npm run build. Default ab-1. Zero JS.
+const theme = import.meta.env.PUBLIC_THEME ?? 'ab-1';
+---
+
+<!doctype html>
+<html lang={site.htmlLang} data-theme={theme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <Seo title={title} description={description} noindex={noindex} ogType={ogType} />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#inhalt"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-5 focus:py-2 focus:font-semibold focus:text-bg focus:shadow"
+    >
+      {t('skip.toMain')}
+    </a>
+    <Header />
+    <main id="inhalt" tabindex="-1" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Arrow from '../components/Arrow.astro';
+import Copy from '../components/Copy.astro';
+import { isPlaceholder } from '../lib/placeholder';
+import { useTranslations } from '../i18n/ui';
+import { linkedinPosts } from '../config/linkedin-posts';
+import {
+  hero,
+  heroLinkedIn,
+  pillarsTitle,
+  pillars,
+  projectsTitle,
+  projectsLink,
+  projects,
+  linkedinTitle,
+  linkedinAll,
+  findMeTitle,
+  findMe,
+} from '../content/home';
+
+// All visible home copy lives in src/content/home.ts and src/config/linkedin-posts.ts.
+const t = useTranslations('de');
+// Posts whose title is still a [placeholder] are not shown.
+const posts = linkedinPosts.filter((post) => !isPlaceholder(post.title)).slice(0, 3);
+---
+
+<BaseLayout
+  title="Davide Cundò · Mit KI bauen, im Verkauf einsetzen, prüfen"
+  description="Key Account Manager aus Wetzikon. Ich baue mit KI eigene Tools wie Zusamo, setze sie im Verkauf ein und zeige ehrlich, wo sie versagt."
+>
+  <div class="container-page flex flex-col gap-14 pt-12 md:gap-16 md:pt-16">
+    <section aria-labelledby="hero-title">
+      <p class="meta fade-up" style="--d:0">{hero.meta}</p>
+      <h1 id="hero-title" class="fade-up mt-3" style="--d:1">{hero.title}</h1>
+      <p class="fade-up mt-5" style="--d:2">{hero.subline}</p>
+      <div class="fade-up mt-7 flex flex-wrap items-center gap-x-6 gap-y-4" style="--d:3">
+        {/* The one 21st effect: Border Beam (dillionverma, demo 1268) around the main button. */}
+        <a href="/projekte/" class="btn-primary group">
+          <span class="border-beam [--beam-size:56] [--beam-duration:7] [--beam-width:1.5]" aria-hidden="true"></span>
+          {t('cta.projects')}
+          <Arrow dir="e" class="!text-on-accent" />
+        </a>
+        <a href={heroLinkedIn.href} class="group text-link inline-flex items-center gap-1" rel="me noopener" target="_blank">
+          {heroLinkedIn.label}
+          <Arrow dir="ne" class="!text-link" />
+          <span class="sr-only"> {t('external.newTab')}</span>
+        </a>
+      </div>
+    </section>
+
+    <section aria-labelledby="pillars-title" class="fade-up" style="--d:4">
+      <h2 id="pillars-title" class="sr-only">{pillarsTitle}</h2>
+      <div class="hairline-grid sm:grid-cols-3">
+        {
+          pillars.map((pillar) => (
+            <div class="tile group relative flex flex-col gap-2 p-5">
+              <h3>
+                <a href={pillar.href} class="stretched-link inline-flex items-center gap-1.5">
+                  {pillar.title}
+                  <Arrow dir="se" />
+                </a>
+              </h3>
+              <p>{pillar.text}</p>
+              <p class="meta mt-auto pt-2">{pillar.proof}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section aria-labelledby="projects-title" class="fade-up" style="--d:5">
+      <div class="flex items-baseline justify-between gap-4">
+        <h2 id="projects-title">{projectsTitle}</h2>
+        <a href={projectsLink.href} class="group nav-link inline-flex items-center gap-1 text-[0.9375rem] text-muted hover:text-ink">
+          {projectsLink.label}
+          <Arrow dir="se" />
+        </a>
+      </div>
+      <ul class="hairline-grid mt-4">
+        {
+          projects.map((project) => (
+            <li>
+              <a
+                href={project.href}
+                class="tile-link group flex items-center gap-4 py-3 pl-5 pr-4"
+                rel={project.external ? 'noopener' : undefined}
+                target={project.external ? '_blank' : undefined}
+              >
+                <span class="flex min-w-0 flex-1 flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-4">
+                  <span class="font-medium sm:w-32 sm:shrink-0">{project.name}</span>
+                  <span class="flex-1 text-muted">
+                    <Copy text={project.oneLiner} />
+                  </span>
+                  <span class="meta sm:w-24 sm:shrink-0 sm:text-right">
+                    {!isPlaceholder(project.status) && <span class="sr-only">Status: </span>}
+                    <Copy text={project.status} />
+                  </span>
+                </span>
+                {/* Row stays Name | one-liner | Status | arrow; the target is named for screen readers only. */}
+                {project.targetLabel && <span class="sr-only">, {project.targetLabel}</span>}
+                <Arrow dir={project.external ? 'ne' : 'se'} class="shrink-0" />
+                {project.external && <span class="sr-only"> {t('external.newTab')}</span>}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      posts.length > 0 && (
+        <section aria-labelledby="linkedin-title" class="fade-up" style="--d:6">
+          <h2 id="linkedin-title">{linkedinTitle}</h2>
+          <ul class="hairline-grid mt-4">
+            {posts.map((post) => (
+              <li>
+                <a href={post.href} class="tile-link group flex items-baseline gap-4 py-3 pl-5 pr-4" rel="noopener" target="_blank">
+                  <time class="meta shrink-0 tabular-nums" datetime={post.isoDate}>
+                    {post.date}
+                  </time>
+                  <span class="min-w-0 flex-1">{post.title}</span>
+                  <Arrow dir="ne" class="shrink-0 self-center" />
+                  <span class="sr-only"> {t('external.newTab')}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p class="mt-4">
+            <a href={linkedinAll.href} class="group text-link inline-flex items-center gap-1" rel="me noopener" target="_blank">
+              {linkedinAll.label}
+              <Arrow dir="ne" class="!text-link" />
+              <span class="sr-only"> {t('external.newTab')}</span>
+            </a>
+          </p>
+        </section>
+      )
+    }
+
+    <section aria-labelledby="findme-title" class="fade-up" style="--d:7">
+      <h2 id="findme-title">{findMeTitle}</h2>
+      <ul class="hairline-grid mt-4 sm:grid-cols-3">
+        {
+          findMe.map((item) => (
+            <li class="flex">
+              <a
+                href={item.href}
+                class="tile-link group relative flex flex-1 flex-col gap-1 p-4"
+                rel={item.external ? 'me noopener' : undefined}
+                target={item.external ? '_blank' : undefined}
+              >
+                <span class="pr-6 font-medium">{item.label}</span>
+                <span class="meta">{item.meta}</span>
+                <Arrow dir="ne" class="absolute right-4 top-5" />
+                {item.external && <span class="sr-only"> {t('external.newTab')}</span>}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>

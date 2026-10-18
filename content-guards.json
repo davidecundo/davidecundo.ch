@@ -1,0 +1,24 @@
+{
+  "root": ".",
+  "buildDir": "dist",
+  "ignoreDirs": [
+    ".git",
+    "node_modules",
+    ".astro"
+  ],
+  "ignoreFiles": [
+    "package-lock.json"
+  ],
+  "forbiddenWords": [
+    "lorem ipsum",
+    "klarki"
+  ],
+  "placeholderPatterns": [
+    "[NEED",
+    "[TODO",
+    "[Platzhalter"
+  ],
+  "allowPatterns": [
+    "href(=|: )[\"']https://zusamo\\.klarki\\.ch/[\"']"
+  ]
+}

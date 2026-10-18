@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const tools = [
+  { tool: 'ChatGPT mit Exa-Plugin', use: 'Produkttrends anschauen, bevor ich mit einem Kunden spreche' },
+  { tool: 'Microsoft Copilot (von meiner Firma freigegeben)', use: 'Die letzten Gespräche mit einem Kunden zusammenfassen' },
+  { tool: 'Codex', use: 'Das Verwaltungstool für die U.S. Virtus Badolato, aus dem Zusamo entstanden ist' },
+  { tool: 'Claude Code', use: 'Neben Codex am Code von Zusamo und meinen anderen Projekten arbeiten' },
+  { tool: 'Notion', use: 'Mein Second Brain: Kontext, Projekte und Regeln, die meine KI-Assistenten zuerst lesen' },
+  { tool: 'Buffer', use: 'Freigegebene Posts für LinkedIn und X einplanen' },
+  { tool: 'Mein KI-Team (Ari, Dev, Mia, Leo)', use: 'Planen, Programmieren, Content und Verkauf vorbereiten' },
+];
+
+// «Was ich kann»: running text instead of CV keywords.
+const skills = [
+  'Ich berate und begleite seit über zehn Jahren Unternehmen, heute als Key Account Manager. KI nutze ich dabei für die Vorbereitung, das Gespräch mit dem Kunden führe ich selbst.',
+  'Ich baue eigene Tools mit KI, ohne Programmierteam. Mein Verwaltungstool für den Club ist so entstanden, und daraus Zusamo.',
+  'Ich richte KI-Assistenten so ein, dass sie meinen Kontext kennen und klare Regeln haben. Was sie liefern, prüfe ich, bevor es rausgeht.',
+  'Ich spreche Deutsch, Italienisch und Englisch.',
+];
+---
+
+<BaseLayout
+  title="Skills & Tools · Davide Cundò: Womit ich KI einsetze"
+  description="Die KI-Tools, mit denen ich baue und im Verkauf arbeite: ChatGPT mit Exa, Copilot, Codex, Claude Code und Notion als Second Brain."
+>
+  <div class="container-page pt-12 md:pt-16">
+    <h1 class="fade-up" style="--d:0">Womit ich arbeite</h1>
+    <p class="fade-up mt-5" style="--d:1">
+      Zu jedem Tool steht, wofür ich es einsetze. Die Liste ändert sich, wenn ich etwas Neues wirklich nutze.
+    </p>
+
+    <section class="fade-up mt-12" style="--d:2" aria-labelledby="tools-title">
+      <h2 id="tools-title">Tools</h2>
+      <div class="hairline-grid mt-4 overflow-x-auto">
+        <table class="w-full border-separate border-spacing-y-px text-left">
+          <caption class="sr-only">Tools und wofür ich sie einsetze</caption>
+          <thead class="meta">
+            <tr>
+              <th scope="col" class="bg-bg px-4 py-2 font-normal">Tool</th>
+              <th scope="col" class="bg-bg px-4 py-2 font-normal">Wofür ich es einsetze</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              tools.map((row) => (
+                <tr>
+                  <th scope="row" class="bg-bg px-4 py-3 align-top font-medium">{row.tool}</th>
+                  <td class="bg-bg px-4 py-3 align-top">{row.use}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="fade-up mt-12" style="--d:3" aria-labelledby="skills-title">
+      <h2 id="skills-title">Was ich kann</h2>
+      <div class="prose-page mt-4">
+        {skills.map((s) => <p>{s}</p>)}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

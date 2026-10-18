@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { useTranslations } from '../i18n/ui';
+import { isPlaceholder } from '../lib/placeholder';
+
+const t = useTranslations('de');
+const showEmail = !isPlaceholder(site.email);
+---
+
+<BaseLayout
+  title="Kontakt · Davide Cundò"
+  description="Fragen zu einem Post, zu Zusamo oder zu meinem KI-Team? Schreib mir direkt. Davide Cundò, Wetzikon ZH."
+>
+  <section class="container-page pt-12 md:pt-16">
+    <div>
+      <h1 class="fade-up" style="--d:0">Schreib mir zu einem Post oder Projekt.</h1>
+      <div class="prose-page fade-up mt-6" style="--d:1">
+        <p>
+          {`Du hast eine Frage zu einem meiner Posts, zu Zusamo oder dazu, wie ich mit meinen KI-Assistenten arbeite? Schreib mir per E-Mail. Ich lese alles selbst und antworte persönlich.`}
+        </p>
+        <p>
+          Auf LinkedIn erzähle ich jeden Dienstag und Freitag, was ich mit KI baue, wie ich sie im Verkauf einsetze und wo
+          sie danebenliegt.
+        </p>
+      </div>
+
+      <div class="fade-up mt-10" style="--d:2">
+      <h2>Kontaktdaten</h2>
+      <dl class="mt-4 grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 [&>dt]:pt-0.5 [&>dt]:font-mono [&>dt]:text-meta [&>dt]:text-muted">
+        {
+          showEmail && (
+            <>
+              <dt>E-Mail</dt>
+              <dd>
+                <a class="text-link" href={`mailto:${site.email}`}>{site.email}</a>
+              </dd>
+            </>
+          )
+        }
+        <dt>LinkedIn</dt>
+        <dd>
+          <a class="text-link break-all" href={site.social.linkedin} rel="me noopener" target="_blank">
+            linkedin.com/in/davide-cundo<span class="sr-only"> {t('external.newTab')}</span>
+          </a>
+        </dd>
+        <dt>X</dt>
+        <dd>
+          <a class="text-link" href={site.social.x} rel="me noopener" target="_blank">
+            @DavideCundo<span class="sr-only"> {t('external.newTab')}</span>
+          </a>
+          <span class="text-muted">, englische Posts über praktische KI im Job</span>
+        </dd>
+        <dt>Ort</dt>
+        <dd>{site.location}</dd>
+      </dl>
+      </div>
+    </div>
+
+  </section>
+</BaseLayout>

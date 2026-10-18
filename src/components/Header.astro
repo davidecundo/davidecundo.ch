@@ -1,0 +1,132 @@
+---
+import { navItems, useTranslations } from '../i18n/ui';
+import { site } from '../config/site';
+
+const t = useTranslations('de');
+const current = Astro.url.pathname.replace(/\/?$/, '/');
+const isCurrent = (href: string) => current === href;
+// Falls back to the contact page if the address ever becomes a placeholder again.
+const mailHref = /^\[.*\]$/.test(site.email) ? '/kontakt/' : `mailto:${site.email}`;
+---
+
+{/* Calm header in the page column: name left, navigation and mail icon right (rasmic.xyz). */}
+<header class="container-page flex items-center justify-between gap-4 pb-4 pt-6 md:pt-8">
+  <a href="/" class="font-semibold text-ink no-underline transition-colors hover:text-accent" aria-current={isCurrent('/') ? 'page' : undefined}>
+    {site.name}
+  </a>
+
+  <div class="flex items-center gap-3 md:gap-6">
+    <nav aria-label={t('nav.label')} class="hidden md:block">
+      <ul class="flex items-center gap-x-5 text-[0.9375rem]">
+        {
+          navItems.slice(1).map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+                class:list={['nav-link', isCurrent(item.href) ? 'text-ink' : 'text-muted hover:text-ink']}
+              >
+                {t(item.key)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    {/* Mobile menu without JavaScript: native <details>. */}
+    <details class="mobile-menu relative md:hidden">
+      <summary
+        class="flex h-9 cursor-pointer list-none items-center gap-2 rounded-md border border-line px-3 text-[0.9375rem] font-medium text-ink transition-colors hover:bg-hover [&::-webkit-details-marker]:hidden"
+      >
+        <span aria-hidden="true" class="menu-icon"><span></span></span>
+        {t('nav.menu')}
+      </summary>
+      <nav
+        aria-label={t('nav.label')}
+        class="absolute right-0 top-full z-40 mt-2 w-56 rounded-sm bg-hairline p-px shadow-[0_12px_24px_-16px_color-mix(in_srgb,var(--ink)_35%,transparent)]"
+      >
+        <ul class="flex flex-col gap-px">
+          {
+            navItems.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={isCurrent(item.href) ? 'page' : undefined}
+                  class:list={[
+                    'tile-link block px-4 py-2.5',
+                    isCurrent(item.href) ? 'font-semibold text-ink' : 'text-ink',
+                  ]}
+                >
+                  {t(item.key)}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </details>
+
+    <a
+      href={mailHref}
+      aria-label="E-Mail an Davide"
+      class="flex size-9 items-center justify-center rounded-md border border-line text-ink transition-colors hover:bg-hover"
+    >
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        width="16"
+        height="16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+      </svg>
+    </a>
+  </div>
+</header>
+
+<style>
+  .menu-icon {
+    position: relative;
+    display: inline-block;
+    width: 14px;
+    height: 9px;
+  }
+  .menu-icon::before,
+  .menu-icon::after,
+  .menu-icon > span {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    border-radius: 1px;
+    background: currentColor;
+    transition:
+      transform 200ms ease,
+      opacity 150ms ease;
+  }
+  .menu-icon::before {
+    top: 0;
+  }
+  .menu-icon > span {
+    top: 3.75px;
+  }
+  .menu-icon::after {
+    bottom: 0;
+  }
+  .mobile-menu[open] .menu-icon::before {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+  .mobile-menu[open] .menu-icon::after {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+  .mobile-menu[open] .menu-icon > span {
+    opacity: 0;
+  }
+</style>

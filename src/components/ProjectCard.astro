@@ -1,0 +1,67 @@
+---
+import { isPlaceholder } from '../lib/placeholder';
+import Arrow from './Arrow.astro';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  title: string;
+  /** Pillar (Bauen, Anwenden, Prüfen), shown in mono above the title. */
+  pillar?: string;
+  /** Status line (e.g. Pilot, Im Aufbau). Placeholders are not rendered. */
+  status?: string;
+  /** Tags shown as mono chips. Strings like [this] are placeholders and not rendered. */
+  tags?: string[];
+  /** Real URL. Without it no link is shown. */
+  href?: string;
+  linkLabel?: string;
+}
+
+const { title, pillar, status, tags = [], href, linkLabel = 'Mehr erfahren' } = Astro.props;
+const t = useTranslations('de');
+const external = !!href && /^https?:\/\//.test(href);
+const metaParts = [pillar, status].filter((part): part is string => !!part && !isPlaceholder(part));
+const visibleTags = tags.filter((tag) => !isPlaceholder(tag));
+// Hide the body block while it only contains placeholders (Ph renders nothing).
+const body = Astro.slots.has('default') ? await Astro.slots.render('default') : '';
+const hasBody = body.replace(/<[^>]*>/g, '').trim().length > 0;
+---
+
+{/* Calm tile, meant to sit inside a `.hairline-grid`. */}
+<article class="tile flex flex-col gap-3 p-5 sm:p-6">
+  {
+    metaParts.length > 0 && (
+      <p class="meta">
+        {pillar && !isPlaceholder(pillar) && <span class="sr-only">Säule: </span>}
+        {metaParts.join(' · ')}
+      </p>
+    )
+  }
+  <h2 class:list={[metaParts.length > 0 && '-mt-1']}>{title}</h2>
+  {hasBody && <div class="prose-page [&_p]:mb-2" set:html={body} />}
+  {
+    visibleTags.length > 0 && (
+      <ul class="flex flex-wrap gap-2" aria-label="Tags">
+        {visibleTags.map((tag) => (
+          <li class="meta rounded-sm bg-hairline px-2 py-0.5 text-ink">{tag}</li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    href && (
+      <p class="mt-1">
+        <a
+          class="group text-link inline-flex items-center gap-1.5"
+          href={href}
+          rel={external ? 'noopener' : undefined}
+          target={external ? '_blank' : undefined}
+        >
+          {linkLabel}
+          {!linkLabel.includes(title) && <span class="sr-only">: {title}</span>}
+          <Arrow dir={external ? 'ne' : 'e'} class="!text-link" />
+          {external && <span class="sr-only"> {t('external.newTab')}</span>}
+        </a>
+      </p>
+    )
+  }
+</article>

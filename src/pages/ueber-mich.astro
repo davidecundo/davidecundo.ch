@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Arrow from '../components/Arrow.astro';
+---
+
+<BaseLayout
+  title="Über mich · Davide Cundò, Key Account Manager, der mit KI baut"
+  description="Wie ich mit KI baue, sie im Verkauf einsetze und jedes Ergebnis prüfe. Mit meinen Regeln: Die KI bereitet vor, ich entscheide."
+  ogType="profile"
+>
+  <article class="container-page pt-12 md:pt-16">
+    <h1 class="fade-up" style="--d:0">Ich prüfe das Ergebnis. Immer.</h1>
+    <div class="prose-page fade-up mt-6" style="--d:1">
+      <p>
+        Ich bin Davide Cundò, Key Account Manager im Verkauf. Ich baue mit KI, setze sie im Verkauf ein und schaue
+        bei jedem Ergebnis hin, bevor ich es verwende.
+      </p>
+      <p>
+        Seit etwa einem Jahr arbeite ich richtig mit KI, im Job und privat. Privat kann ich endlich Ideen umsetzen, für die
+        ich vorher viel Geld und externes Know-how gebraucht hätte. Im Job nimmt mir KI die Vorbereitung ab, damit ich
+        schneller entscheiden kann.
+      </p>
+    </div>
+
+    <section id="pruefen" class="prose-page fade-up mt-12 scroll-mt-24" style="--d:2" aria-labelledby="pruefen-title">
+      <h2 id="pruefen-title">Wie ich prüfe</h2>
+      <p>In der Anfangszeit musste ich viel prüfen und korrigieren.</p>
+      <p>
+        Inzwischen sieht das anders aus. In Notion habe ich mir ein Second Brain aufgebaut, mit meinem Kontext, meinen
+        Projekten und den Regeln für meine Assistenten. Diese Seiten lesen sie, bevor sie loslegen. Seither prüfe ich meist
+        nur noch, ob mir ein Text stilistisch gefällt.
+      </p>
+      <p>Je besser der Kontext, desto weniger muss ich korrigieren. Das Prüfen lasse ich trotzdem nie weg.</p>
+    </section>
+
+    <section class="prose-page fade-up mt-12" style="--d:3" aria-labelledby="grenzen-title">
+      <h2 id="grenzen-title">Meine Grenzen</h2>
+      <p>
+        Die KI bereitet vor, ich entscheide. Meine Assistenten dürfen recherchieren, vorbereiten und Entwürfe schreiben.
+        Veröffentlicht wird erst, wenn ich den genauen Text freigegeben habe.
+      </p>
+      <p>
+        Bei autonomen Einkäufen ziehe ich meine Grenze klar. Meine Kreditkarte bekommt kein Assistent. Persönliche Daten und
+        heikle interne Infos gebe ich keiner KI.
+      </p>
+    </section>
+
+    <section id="bauen" class="prose-page fade-up mt-12 scroll-mt-24" style="--d:4" aria-labelledby="bauen-title">
+      <h2 id="bauen-title">Was ich baue</h2>
+      <p>
+        Für unseren Fussballclub, die U.S. Virtus Badolato, habe ich mit Codex ein eigenes Verwaltungstool gebaut. Am
+        schwierigsten war eine schöne Oberfläche, dafür habe ich mir bei bestehenden Tools Inspiration geholt. Aus diesem
+        Tool ist Zusamo entstanden. Heute baue ich es nach dem weiter, was die Vereine brauchen, mit denen ich arbeite.
+      </p>
+      <p>Dazu kommt mein Team aus KI-Assistenten: Ari organisiert, Dev programmiert, Mia hilft beim Content, Leo beim Verkauf.</p>
+    </section>
+
+    <section id="verkauf" class="prose-page fade-up mt-12 scroll-mt-24" style="--d:5" aria-labelledby="verkauf-title">
+      <h2 id="verkauf-title">Wie ich KI im Verkauf einsetze</h2>
+      <p>
+        Vor einem Kundentermin schaue ich mir mit dem Exa-Plugin in ChatGPT die Produkttrends an. Mit dem Copilot, den meine
+        Firma freigegeben hat, fasse ich die letzten Gespräche mit dem Kunden zusammen. Nach rund fünf Minuten bin ich
+        vorbereitet.
+      </p>
+    </section>
+
+    <section class="fade-up mt-12 border-t border-line pt-6" style="--d:6" aria-labelledby="person-title">
+      <h2 id="person-title" class="meta !text-muted">Kurz zur Person</h2>
+      <p class="mt-2 text-muted">
+        Wetzikon ZH. Seit über zehn Jahren berate und begleite ich Unternehmen.
+        Daneben schreibe ich an meiner Bachelorarbeit und bin Präsident der U.S. Virtus Badolato. Ich spreche Deutsch,
+        Italienisch und Englisch.
+      </p>
+    </section>
+
+    <p class="fade-up mt-10" style="--d:7">
+      <a href="/projekte/" class="btn-primary group">
+        Woran ich gerade arbeite
+        <Arrow dir="e" class="!text-on-accent" />
+      </a>
+    </p>
+  </article>
+</BaseLayout>

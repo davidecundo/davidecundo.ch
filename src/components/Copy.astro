@@ -1,0 +1,16 @@
+---
+/**
+ * Renders a copy string. If the whole string is a [placeholder], it goes through Ph.astro.
+ */
+import Ph from './Ph.astro';
+import { isPlaceholder as isPh } from '../lib/placeholder';
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+const isPlaceholder = isPh(text);
+---
+
+{isPlaceholder ? <Ph>{text}</Ph> : text}

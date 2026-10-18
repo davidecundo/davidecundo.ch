@@ -1,0 +1,35 @@
+---
+import { site } from '../config/site';
+import { isPlaceholder } from '../lib/placeholder';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path for the canonical URL, defaults to the current path. */
+  path?: string;
+  /** true for placeholder or error pages that must not be indexed. */
+  noindex?: boolean;
+  ogType?: 'website' | 'profile';
+}
+
+const { title, description, path = Astro.url.pathname, noindex = false, ogType = 'website' } = Astro.props;
+const canonical = new URL(path, site.url).href;
+/** Placeholder descriptions like "[Meta-Description …]" are not rendered. */
+const desc = isPlaceholder(description) ? undefined : description;
+---
+
+<title>{title}</title>
+{desc && <meta name="description" content={desc} />}
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, follow" />}
+
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.ogLocale} />
+<meta property="og:title" content={title} />
+{desc && <meta property="og:description" content={desc} />}
+<meta property="og:url" content={canonical} />
+{/* og:image follows once a portrait exists. */}
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+{desc && <meta name="twitter:description" content={desc} />}
